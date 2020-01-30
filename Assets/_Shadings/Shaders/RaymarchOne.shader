@@ -68,14 +68,39 @@
                 return dO;
             }
 
+            float3 GetNormal(float3 p) {
+                float2 e = float2(1e-2, 0);
+                float3 n = GetDist(p) - float3(
+                    GetDist(p - e.xyy),
+                    GetDist(p - e.yxy),
+                    GetDist(p - e.yyx)
+                );
+                return normalize(n);
+            }
+
+            float GetLight(float3 p) {
+                float3 lightPos = float3(0, 5, 2);
+                lightPos.x += sin(_Time)*10;
+                lightPos.z += cos(_Time)*10;
+                float3 l = normalize(lightPos-p);
+                float3 n = GetNormal(p);
+
+                float dif = clamp(dot(n, l), 0, 1);
+                float d = RayMarch(p+n*SURF_DIST*2, l);
+                if(d<length(lightPos-p)) dif *= .1;
+                return dif;
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
                 float2 uv = i.uv-.5;
                 float3 ro = i.ro;
                 float3 rd = normalize(i.hitPos - ro);
                 float d = RayMarch(ro, rd);
-                d /= 6.;
-                float3 col = d;
+                
+                float3 p = ro + rd * d;
+                float dif = GetLight(p);
+                float3 col = dif;
                 return float4(col.x, col.y, col.z, 1);
             }
             ENDCG
