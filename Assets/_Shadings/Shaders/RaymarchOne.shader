@@ -164,12 +164,12 @@
                 float3 p = ro + rd * d;
                 float dif = GetLight(p);
                 float3 col = dif;
+                float saturation = .4;
                 float brightness = .4;
 
-                float saturation = .8;
                 float3 animCol = float3(sin(t), cos(t), sin(t)*-1);
 
-                col = col*normalize(animCol) + brightness;
+                col = lerp(col, normalize(animCol), saturation) + brightness;
 
                 fixed4 fragCol = 1;
                 fragCol.xyz = col.xyz;
