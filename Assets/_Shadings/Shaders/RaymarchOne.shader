@@ -42,18 +42,43 @@
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                // World space
-                o.ro = _WorldSpaceCameraPos;
+                // Use world space origin
+                 o.ro = _WorldSpaceCameraPos;
                 o.hitPos = mul(unity_ObjectToWorld, v.vertex);
                 return o;
             }
 
-            float GetDist(float3 p) {
-                float4 s = float4(0, 1, 2, 0.5);
+            float sdSphere(float3 p, float4 s) {
+                return length(p-s.xyz)-s.w;
+            }
 
-                float sphereDist = length(p-s.xyz)-s.w;
+            float sdCapsule(float3 p, float3 a, float3 b, float r) {
+                float3 ab = b-a;
+                float3 ap = p-a;
+                float t = dot(ab, ap) / dot(ab, ab);
+                t = clamp(t, 0., 1.);
+                float3 c = a + t*b;
+                return length(p-c)-r;
+            } 
+
+            float GetDist(float3 p) {
+                // Define some spheres
+                float4 s01 = float4(.6, 1, 2, .4);
+                float4 s02 = float4(1.2, .6, 1, .6);
+                float4 s03 = float4(1, 1.4, 1.4, .2);
+                // Get sphere distances
+                float sd01 = sdSphere(p, s01);
+                float sd02 = sdSphere(p, s02);
+                float sd03 = sdSphere(p, s03);
+                float spheresD = min(sd01, sd02);
+                spheresD = min(spheresD, sd03);
+                // Simple plane
                 float planeDist = p.y;
-                float d = min(sphereDist, planeDist);
+                // Capsule
+                float cd = sdCapsule(p, float3(0, 1, 6), float3(1, 2, 6), .2);
+                
+                float d = min(spheresD, planeDist);
+                // d = min(d, cd); // TODO: capsule wonky atm
                 return d;
             }
 
@@ -87,7 +112,7 @@
 
                 float dif = clamp(dot(n, l), 0, 1);
                 float d = RayMarch(p+n*SURF_DIST*2, l);
-                if(d<length(lightPos-p)) dif *= .1;
+                if(d<length(lightPos-p)) dif *= .08;
                 return dif;
             }
 
@@ -101,7 +126,10 @@
                 float3 p = ro + rd * d;
                 float dif = GetLight(p);
                 float3 col = dif;
-                return float4(col.x, col.y, col.z, 1);
+
+                fixed4 fragCol = 1;
+                fragCol.xyz = col.xyz;
+                return fragCol;
             }
             ENDCG
         }
