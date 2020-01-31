@@ -154,6 +154,8 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
+                float t = _Time;
+                
                 float2 uv = i.uv-.5;
                 float3 ro = i.ro;
                 float3 rd = normalize(i.hitPos - ro);
@@ -162,6 +164,12 @@
                 float3 p = ro + rd * d;
                 float dif = GetLight(p);
                 float3 col = dif;
+                float brightness = .4;
+
+                float saturation = .8;
+                float3 animCol = float3(sin(t), cos(t), sin(t)*-1);
+
+                col = col*normalize(animCol) + brightness;
 
                 fixed4 fragCol = 1;
                 fragCol.xyz = col.xyz;
