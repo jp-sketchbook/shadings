@@ -69,6 +69,17 @@
                 return length(pa - ba*h ) - r;
             }
 
+            float sdHexPrism(float3 p, float2 h)
+            {
+                const float3 k = float3(-0.8660254, 0.5, 0.57735);
+                p = abs(p);
+                p.xy -= 2.0*min(dot(k.xy, p.xy), 0.0)*k.xy;
+                float2 d = float2(
+                    length(p.xy-float2(clamp(p.x,-k.z*h.x,k.z*h.x), h.x))*sign(p.y-h.x),
+                    p.z-h.y );
+                return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+            }
+
             float GetDist(float3 p) {
                 float t = _Time;
                 // Define some spheres
@@ -84,10 +95,14 @@
                 // Simple plane
                 float planeDist = p.y;
                 // Capsule
-                float cd = sdCapsule(p, float3(-2, 1, 1), float3(-1, 2, 1), .2);
+                float capsuleD = sdCapsule(p, float3(-2, 1, 1), float3(-1, 2, 1), .2);
+                // Prism
+                float3 prismPos = float3(-.2, 1, 1);
+                float prismD = sdHexPrism(p - prismPos, float2(.2, .2));
                 
                 float d = min(spheresD, planeDist);
-                d = min(d, cd); // TODO: capsule wonky atm
+                d = min(d, capsuleD);
+                d = min(d, prismD);
                 return d;
             }
 
