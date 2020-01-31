@@ -48,8 +48,9 @@
                 return o;
             }
 
+            // Different positioning convention than other shapes - xyz of float4 s = Sphere
             float sdSphere(float3 p, float4 s) {
-                return length(p-s.xyz)-s.w;
+                return length(p-s.xyz)-s.w; // s.w is radius of sphere
             }
 
             // KEPT FOR REFERENCE - works in glsl example but not here? Typo?
@@ -61,7 +62,7 @@
             //     float3 c = a + t*b;
             //     return length(p-c)-r;
             // }
-
+            
             float sdCapsule(float3 p, float3 a, float3 b, float r )
             {
                 float3 pa = p - a, ba = b - a;
@@ -78,6 +79,12 @@
                     length(p.xy-float2(clamp(p.x,-k.z*h.x,k.z*h.x), h.x))*sign(p.y-h.x),
                     p.z-h.y );
                 return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+            }
+
+            float sdOctahedron(float3 p, float s)
+            {
+                p = abs(p);
+                return (p.x+p.y+p.z-s)*0.57735027;
             }
 
             float GetDist(float3 p) {
@@ -99,10 +106,14 @@
                 // Prism
                 float3 prismPos = float3(-.2, 1, 1);
                 float prismD = sdHexPrism(p - prismPos, float2(.2, .2));
+                // Octahedron
+                float3 octaPos = float3(2, 1, 0);
+                float octaD = sdOctahedron(p - octaPos, .5);
                 
                 float d = min(spheresD, planeDist);
                 d = min(d, capsuleD);
                 d = min(d, prismD);
+                d = min(d, octaD);
                 return d;
             }
 
