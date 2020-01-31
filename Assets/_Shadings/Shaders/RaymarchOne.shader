@@ -52,16 +52,25 @@
                 return length(p-s.xyz)-s.w;
             }
 
-            float sdCapsule(float3 p, float3 a, float3 b, float r) {
-                float3 ab = b-a;
-                float3 ap = p-a;
-                float t = dot(ab, ap) / dot(ab, ab);
-                t = clamp(t, 0., 1.);
-                float3 c = a + t*b;
-                return length(p-c)-r;
-            } 
+            // KEPT FOR REFERENCE - works in glsl example but not here? Typo?
+            // float sdCapsule(float3 p, float3 a, float3 b, float r) {
+            //     float3 ab = b-a;
+            //     float3 ap = p-a;
+            //     float t = dot(ab, ap) / dot(ab, ab);
+            //     t = clamp(t, 0., 1.);
+            //     float3 c = a + t*b;
+            //     return length(p-c)-r;
+            // }
+
+            float sdCapsule(float3 p, float3 a, float3 b, float r )
+            {
+                float3 pa = p - a, ba = b - a;
+                float h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+                return length(pa - ba*h ) - r;
+            }
 
             float GetDist(float3 p) {
+                float t = _Time;
                 // Define some spheres
                 float4 s01 = float4(.6, 1, 2, .4);
                 float4 s02 = float4(1.2, .6, 1, .6);
@@ -75,10 +84,10 @@
                 // Simple plane
                 float planeDist = p.y;
                 // Capsule
-                float cd = sdCapsule(p, float3(0, 1, 6), float3(1, 2, 6), .2);
+                float cd = sdCapsule(p, float3(-2, 1, 1), float3(-1, 2, 1), .2);
                 
                 float d = min(spheresD, planeDist);
-                // d = min(d, cd); // TODO: capsule wonky atm
+                d = min(d, cd); // TODO: capsule wonky atm
                 return d;
             }
 
@@ -104,9 +113,10 @@
             }
 
             float GetLight(float3 p) {
+                float t = _Time;
                 float3 lightPos = float3(0, 5, 2);
-                lightPos.x += sin(_Time)*10;
-                lightPos.z += cos(_Time)*10;
+                lightPos.x += sin(_Time)*20;
+                lightPos.z += cos(_Time)*20;
                 float3 l = normalize(lightPos-p);
                 float3 n = GetNormal(p);
 
