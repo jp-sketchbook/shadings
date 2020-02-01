@@ -98,11 +98,6 @@
                 fixed4 col = 0;
                 float m = dot(uv, uv);
          
-                // if(d > MAX_DIST) {
-                //     discard;
-                // } else {
-                //     
-                // }
                 if(d < MAX_DIST) {
                     float3 p = ro + rd * d;
                     float3 n = GetNormal(p);
