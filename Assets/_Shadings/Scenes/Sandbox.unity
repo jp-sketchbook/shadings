@@ -161,17 +161,22 @@ PrefabInstance:
     - target: {fileID: 15196579819462105, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_Name
-      value: DonutInABox
+      value: OctahedronInABox
       objectReference: {fileID: 0}
+    - target: {fileID: 15196579819462107, guid: 131502c6c571646009fd4a2d80159747,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5568f9f58334d482c8067952b337c02a, type: 2}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.306
+      value: 0.206
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.831
+      value: -0.861
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
@@ -181,22 +186,22 @@ PrefabInstance:
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
@@ -211,7 +216,7 @@ PrefabInstance:
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
@@ -221,17 +226,17 @@ PrefabInstance:
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 131502c6c571646009fd4a2d80159747, type: 3}
@@ -1234,7 +1239,7 @@ PrefabInstance:
     - target: {fileID: 15196579819462105, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
       propertyPath: m_Name
-      value: DonutInABox (2)
+      value: DonutInABox
       objectReference: {fileID: 0}
     - target: {fileID: 15196579819462109, guid: 131502c6c571646009fd4a2d80159747,
         type: 3}
@@ -1324,7 +1329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1621663189}
   m_Layer: 0
-  m_Name: HmmDonuts
+  m_Name: ShapesInBoxes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1352,7 +1357,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh21058
+  m_Name: pb_Mesh18914
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
