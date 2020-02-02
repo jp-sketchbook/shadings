@@ -90,28 +90,25 @@
             float GetDist(float3 p) {
                 float t = _Time;
                 // Define some spheres
-                float4 s01 = float4(.6, 1, 2, .4);
-                float4 s02 = float4(1.2, .6, 1, .6);
-                float4 s03 = float4(1, 1.4, 1.4, .2);
+                float4 s01 = float4(-.1, 1.8, 2, .3);
+                float4 s02 = float4(.8, .8, 3, .8);
                 // Get sphere distances
                 float sd01 = sdSphere(p, s01);
                 float sd02 = sdSphere(p, s02);
-                float sd03 = sdSphere(p, s03);
                 float spheresD = min(sd01, sd02);
-                spheresD = min(spheresD, sd03);
                 // Simple plane
                 float planeDist = p.y;
-                // Capsule
-                float capsuleD = sdCapsule(p, float3(-2, 1, 1), float3(-1, 2, 1), .2);
+                // Capsule - removed for performance
+                // float capsuleD = sdCapsule(p, float3(-2, 1, 1), float3(-1, 2, 1), .2);
                 // Prism
-                float3 prismPos = float3(-.2, 1, 1);
+                float3 prismPos = float3(-.65, 1.2, 1.4);
                 float prismD = sdHexPrism(p - prismPos, float2(.2, .2));
                 // Octahedron
-                float3 octaPos = float3(2, 1, 0);
+                float3 octaPos = float3(1, 1, 1.2);
                 float octaD = sdOctahedron(p - octaPos, .5);
                 
                 float d = min(spheresD, planeDist);
-                d = min(d, capsuleD);
+                // d = min(d, capsuleD);
                 d = min(d, prismD);
                 d = min(d, octaD);
                 return d;

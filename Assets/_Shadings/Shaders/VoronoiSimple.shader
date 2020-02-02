@@ -4,6 +4,10 @@
     {
         _Speed ("Speed", Range (1, 100)) = 10
         _Density("Point Density", Range (1., 20.)) = 5.
+        _Sharpen("Sharpen", Range(0, 1)) = 0
+        _Brighten("Brighten", Range(0, .5)) = 0
+        _LineColor("Line Color", Color) = (1,0,0,1)
+        _CellColor("Cell Color", Color) = (0,0,1,1)
     }
     SubShader
     {
@@ -34,6 +38,11 @@
 
             float _Speed;
             int _Density;
+            float _Sharpen;
+            float _Brighten;
+            float4 _LineColor;
+            float4 _CellColor;
+
 
             v2f vert (appdata v)
             {
@@ -61,22 +70,34 @@
                 uv *= _Density;
                 float2 gv = frac(uv)-.5;
                 float2 id = floor(uv);
+                float2 cid = 0;
                 
                 for(float y=-1; y<=1; y++) {
                     for(float x=-1; x<=1; x++) {
                         float2 offs = float2(x, y);
                         float2 n = N22(id+offs);
                         float2 p = offs+sin(n*t)*.5;
-                        float d = length(gv-p);
+                        p -= gv;
+                        float ed = length(p);
+                        float md = abs(p.x)+abs(p.y);
+                        float d = lerp(ed, md, _Sharpen);
                         if(d<minDist) {
                             minDist = d;
+                            cid = id+offs;
                         }
                     }
                 }
 
                 float3 col = minDist;
+                float4 brightness = float4(col, 1);
+                float4 darkness = float4(1-col.x, 1-col.y, 1-col.z, 1);
 
-                float4 fragCol = float4(col, 1);
+                float4 lightCol = _LineColor*brightness;
+                float4 darkCol = _CellColor*darkness;
+                float4 brightenCol = _Brighten;
+
+                float4 fragCol = lerp(lightCol,darkCol,.5);
+                fragCol += brightenCol;
                 return fragCol;
             }
             ENDCG
