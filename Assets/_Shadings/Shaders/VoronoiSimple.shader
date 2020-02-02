@@ -2,9 +2,8 @@
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
         _Speed ("Speed", Range (1, 100)) = 10
-        _Count("Point Count", Range (10, 50)) = 20
+        _Density("Point Density", Range (1., 20.)) = 5.
     }
     SubShader
     {
@@ -33,9 +32,8 @@
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex;
             float _Speed;
-            int _Count;
+            int _Density;
 
             v2f vert (appdata v)
             {
@@ -53,25 +51,31 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                // float2 uv = i.uv;
                 float2 uv = i.uv*2 - 1;
-                // return float4(uv, 0, 0);
+
                 float t = _Time*_Speed;
                 float m = 0;
 
                 float minDist = 100.;
-                for(float i=0; i<_Count; i++) {
-                    float2 n = N22(i);
-                    float2 p = sin(n*t);
-
-                    float d = length(uv-p);
-                    m += smoothstep(.05, .03, d);
-
-                    if(d<minDist) {
-                        minDist = d;
+                
+                uv *= _Density;
+                float2 gv = frac(uv)-.5;
+                float2 id = floor(uv);
+                
+                for(float y=-1; y<=1; y++) {
+                    for(float x=-1; x<=1; x++) {
+                        float2 offs = float2(x, y);
+                        float2 n = N22(id+offs);
+                        float2 p = offs+sin(n*t)*.5;
+                        float d = length(gv-p);
+                        if(d<minDist) {
+                            minDist = d;
+                        }
                     }
                 }
+
                 float3 col = minDist;
+
                 float4 fragCol = float4(col, 1);
                 return fragCol;
             }
